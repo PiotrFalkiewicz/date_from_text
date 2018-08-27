@@ -80,6 +80,7 @@ def date_recognition(text):
 
     regexp8 = ['dwadzieścia', 20]
 
+    regexp9 = ['dziewięćset', 900]
 
     matches = []
 
@@ -133,6 +134,11 @@ def date_recognition(text):
         for match in z:
                 matches.append([match.start(), regexp8[1], 8])
 
+    z = re.finditer(regexp9[0], sentence)
+    if z:
+        for match in z:
+                matches.append([match.start(), regexp9[1], 9])
+
 
     sorted_matched = sorted(matches, key =lambda l:l[0], reverse = False)
 
@@ -141,19 +147,21 @@ def date_recognition(text):
     month_trigger = True
     year_trigger1 = True
     year_trigger2 = True
+    year_trigger3 = True
     position = -1
     temp = 0
 
     for it in range(len(sorted_matched)):
+
         if position == sorted_matched[it][0]:
             continue
 
         if sorted_matched[it][2] <= 2 and day_trigger:
             day = sorted_matched[it][1]
-            # print(day)
             iter = it + 1
             day_trigger = False
             position = sorted_matched[it][0]
+
         elif sorted_matched[it][2] == 5 and day_trigger:
             day = sorted_matched[it][1] + sorted_matched[it+1][1]
             iter = it + 2
@@ -165,67 +173,80 @@ def date_recognition(text):
             iter = it+1
             month_trigger = False
             position = sorted_matched[it+1][0]
+
         elif sorted_matched[it][2] in [1,2,4,6] and not day_trigger and month_trigger:
             month = sorted_matched[it][1]
             iter = it+1
             month_trigger = False
             position = sorted_matched[it][0]
-            # print(month)
+
         elif not day_trigger and not month_trigger:
             year_list = sorted_matched[it:]
 
             pos = 0
 
             if year_list[0][2] == 2 or year_list[0][2] == 7 and year_trigger1:
+
                 temp = 1900
                 year_trigger1 = False
-                pos = 1
+                pos = year_list[0][0]
+
             elif year_list[0][2] == 5 or (year_list[0][2] == 6 and year_list[1][2] == 7) and year_trigger1:
+
                 temp = 2000
                 year_trigger1 = False
-                if year_list[0][2] == 5:
-                    pos = 1
-                elif year_list[0][2] == 6 and year_list[1][2] == 7:
-                    pos = 2
 
-            if not year_trigger1 and year_trigger2:
+                if year_list[0][2] == 5:
+                    pos = year_list[0][0]
+
+                elif year_list[0][2] == 6 and year_list[1][2] == 7:
+                    pos = year_list[1][0]
+
+            if not year_trigger1 and year_trigger2 and len(year_list) != 2:
+                year_list = [x for x in year_list if x[0] > pos]
+
+                if year_list[0][2] == 9:
+                    year_list = year_list[1:]
+
+                elif year_list[1][2] == 9:
+                    year_list = year_list[2:]
+
+                year_trigger2 = False
+
                 if year_list[-2][2] == 5:
                     temp += year_list[-2][1]
                     temp += year_list[-1][1]
-                    year_trigger2 = False
-                else:
-                    temp += year_list[-2][1]*10
-                    temp += year_list[-1][1]
-                    year_trigger2 = False
 
+                elif year_list[0][2] == 2:
+                    temp += year_list[-2][1]
+
+                elif year_list[0][2] == 6 and year_list[1][2] == 6:
+                    temp += year_list[0][1]*10
+                    temp += year_list[1][1]
+
+                elif year_list[0][2] == 5 and year_list[-1][2] == 1:
+                    temp += year_list[0][1]
+                    temp += year_list[-1][1]
+
+            if temp == 1900 or temp == 2000:
+                if len(year_list) == 2:
+                    if year_list[0][2] == 2 and year_list[1][2] == 6:
+                        temp += year_list[0][1]
+                    if year_list[0][2] == 5 and year_list[1][2] == 1:
+                        temp += year_list[0][1]
+                        temp += year_list[1][1]
 
             if len(year_list) == 2 and year_trigger1 and year_trigger2:
-                # temp2 = 0
+
                 if year_list[0][2] == 5:
                     temp = int('19'+str(year_list[0][1]+year_list[1][1]))
+
                 else:
                     temp = int('19' + str(year_list[0][1]) + str(year_list[1][1]))
-            # print(year_list[pos:])
-            return {"day": day, "month": month, "year": temp}
-            # for i in range(len(year_list)):
-            #     if position == year_list[i][0]:
-            #         continue
-            #     if year_list[i][2] == 6 and year_list[i][1] == 2 and year_trigger:
-            #         temp = 2
-            #         year_trigger = False
-            #     if year_list[i][2] == 7 and temp == 2 and not year_trigger:
-            #         temp = 2000
-            #         year_trigger = False
-            #     if year_list[i][2] == 7 and temp == 0 and year_trigger:
-            #         year = 1000
-            #         year_trigger = False
-            #         year_trigger= False
-            #
-            #         print(year, year_list)
-            #     if len(year_list) == 2 and year_trigger:
-            #         year = 1900 + year_list[0][1] * 10 + year_list[1][1]
-            #         year_trigger = False
 
+
+
+            return {"day": day, "month": month, "year": temp}
 
 
     # result = {

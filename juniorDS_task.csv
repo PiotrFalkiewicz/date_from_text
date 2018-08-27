@@ -6,17 +6,17 @@ day,month,year,text
 11,12,2088,hmmm jedenasty dwunasty dwa tysiące osiemdziesiąty ósmy
 24,10,1999,to będzie dwudziestego czwartego dziesiątego  dziewięć dziewięć
 9,4,1999,yyyy dziewiąty zero czwarty  dziewięć dziewięć
-3,10,2078,"dobrze, to tak trzeciego dziesiątego dwa tysiące siedemdziesiątego ósmego"
+3,10,2078,dobrze, to tak trzeciego dziesiątego dwa tysiące siedemdziesiątego ósmego
 7,1,2075,to znaczy tak siódmy styczeń dwa tysiące siedemdziesiątego piątego
-9,12,1999,"dobrze, to tak dziewiąty dwunastego  dziewięć dziewięć"
+9,12,1999,dobrze, to tak dziewiąty dwunastego  dziewięć dziewięć
 13,1,2045, trzynastego stycznia dwa tysiące czterdziesty piąty
 18,1,2078,to będzie osiemnastego stycznia dwadzieścia siedemdziesiąt osiem
 3,12,2011, trzeciego dwunastego dwadzieścia jedenaście
 24,4,1999,zatem dwudziestego czwartego zero czwartego dziewiętnaście dziewięćdziesiąt dziewięć
 9,12,2045, dziewiąty grudzień dwa tysiące czterdziesty piąty
-9,1,2088,"dobrze, to tak dziewiątego zero pierwszego dwadzieścia osiemdziesiąt osiem"
+9,1,2088,dobrze, to tak dziewiątego zero pierwszego dwadzieścia osiemdziesiąt osiem
 7,12,2078,to będzie siódmy grudzień dwa tysiące siedemdziesiąty ósmy
-6,7,2045,"dobrze, to tak szóstego lipca dwa tysiące czterdziestego piątego"
+6,7,2045,dobrze, to tak szóstego lipca dwa tysiące czterdziestego piątego
 6,7,1975,no to tak szósty lipiec dziewiętnaście siedemdziesiąt pięć
 5,10,1911,zatem piąty października  jedenastego
 5,7,1975,no to tak piąty zero siódmy tysiąc dziewięćset siedemdziesiątego piątego
@@ -31,12 +31,12 @@ day,month,year,text
 24,4,1988,już podaje dwudziestego czwartego kwietnia dziewiętnaście osiemdziesiąt osiem
 5,10,1978,to będzie piąty październik dziewiętnaście siedemdziesiąt osiem
 21,10,2011,em dwudziesty pierwszy października dwadzieścia jedenaście
-3,10,2088,"dobrze, to tak trzeciego października dwadzieścia osiemdziesiąt osiem"
+3,10,2088,dobrze, to tak trzeciego października dwadzieścia osiemdziesiąt osiem
 18,1,1988,to będzie osiemnasty styczeń tysiąc dziewięćset osiemdziesiąt osiem
 3,12,2011,już podaje trzeci dwunastego dwa tysiące jedenasty
 10,7,1988,hmmm dziesiątego lipca  osiem osiem
 12,12,1988,hmmm dwunasty grudnia  osiem osiem
-21,1,1975,"dobrze, to tak dwudziesty pierwszy zero pierwszy  siedem pięć"
+21,1,1975,dobrze, to tak dwudziesty pierwszy zero pierwszy  siedem pięć
 21,1,2091,już podaje dwudziestego pierwszego zero pierwszego dwadzieścia dziewięćdziesiąt jeden
 1,12,1978,zatem pierwszego dwunastego tysiąc dziewięćset siedemdziesiąty ósmy
 3,10,2078,yyyy trzeciego dziesiątego dwadzieścia siedemdziesiąt osiem
@@ -59,7 +59,7 @@ day,month,year,text
 7,2,1978,hmmm siódmy luty dziewiętnaście siedemdziesiąt osiem
 11,10,2088,yyyy jedenasty dziesiąty dwa tysiące osiemdziesiąt osiem
 18,4,2099,to znaczy tak osiemnasty zero czwarty dwa tysiące dziewięćdziesiąt dziewięć
-3,1,2075,"dobrze, to tak trzeciego zero pierwszego dwadzieścia siedemdziesiąt pięć"
+3,1,2075,dobrze, to tak trzeciego zero pierwszego dwadzieścia siedemdziesiąt pięć
 1,2,2088,to znaczy tak pierwszy zero drugi dwadzieścia osiemdziesiąt osiem
 5,7,1945,zatem piątego zero siódmego tysiąc dziewięćset czterdziesty piąty
 9,4,2075,em dziewiąty zero czwarty dwa tysiące siedemdziesiątego piątego
@@ -87,8 +87,8 @@ day,month,year,text
 1,4,2078,yyyy pierwszego kwietnia dwa tysiące siedemdziesiątego ósmego
 12,12,2011,to znaczy tak dwunasty grudnia dwadzieścia jedenaście
 13,2,1945,to znaczy tak trzynastego zero drugiego  cztery pięć
-18,2,1911,"dobrze, to tak osiemnastego zero drugiego  jedenastego"
-24,10,1999,"dobrze, to tak dwudziestego czwartego dziesiątego tysiąc dziewięćset dziewięćdziesiąty dziewiąty"
+18,2,1911,dobrze, to tak osiemnastego zero drugiego  jedenastego
+24,10,1999,dobrze, to tak dwudziestego czwartego dziesiątego tysiąc dziewięćset dziewięćdziesiąty dziewiąty
 24,12,1991,to znaczy tak dwudziestego czwartego grudnia tysiąc dziewięćset dziewięćdziesiąty pierwszy
 9,10,2099,zatem dziewiąty października dwadzieścia dziewięćdziesiąt dziewięć
 9,2,2011,już podaje dziewiątego lutego dwadzieścia jedenaście
@@ -108,7 +108,7 @@ day,month,year,text
 21,4,2011,yyyy dwudziestego pierwszego kwietnia dwa tysiące jedenasty
 3,4,1991,zatem trzeciego kwietnia  dziewięć jeden
 10,1,1911,już podaje dziesiąty styczeń  jedenastego
-12,12,1945,"dobrze, to tak dwunasty grudnia dziewiętnaście czterdzieści pięć"
+12,12,1945,dobrze, to tak dwunasty grudnia dziewiętnaście czterdzieści pięć
 10,12,1999,hmmm dziesiątego dwunastego  dziewięć dziewięć
 9,7,1991,już podaje dziewiątego lipca  dziewięć jeden
 28,7,1999,no to tak dwudziesty ósmy zero siódmy dziewiętnaście dziewięćdziesiąt dziewięć
@@ -145,7 +145,7 @@ day,month,year,text
 10,10,2045,em dziesiątego dziesiątego dwadzieścia czterdzieści pięć
 3,1,2075,no to tak trzeci zero pierwszy dwadzieścia siedemdziesiąt pięć
 13,1,1978,yyyy trzynastego stycznia  siedem osiem
-9,4,1911,"dobrze, to tak dziewiątego zero czwartego tysiąc dziewięćset jedenasty"
+9,4,1911,dobrze, to tak dziewiątego zero czwartego tysiąc dziewięćset jedenasty
 2,10,2088, drugi październik dwa tysiące osiemdziesiąt osiem
 5,2,2045,hmmm piątego zero drugiego dwa tysiące czterdziestego piątego
 3,1,2091,no to tak trzeci styczeń dwa tysiące dziewięćdziesiąt jeden
