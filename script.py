@@ -54,9 +54,9 @@ def date_recognition(text):
     ]
 
     regexp5 = [
-        ['dwudziest(y|ego)', 20],
-        ['trzydziest(y|ego)', 30],
-        ['czterdziest(y|ego)', 40],
+        ['dw(adzieścia|(udziest(y|ego)))', 20],
+        ['trzydzie(ści|(st(y|ego)))', 30],
+        ['czterdzie(ści|(st(y|ego)))', 40],
         ['pięćdziesiąt(y|ego)', 50],
         ['sześćdziesiąt(y|ego)', 60],
         ['siedemdziesiąt(y|ego)', 70],
@@ -79,6 +79,7 @@ def date_recognition(text):
     regexp7 = ['tysiąc(|e)', 1000]
 
     regexp8 = ['dwadzieścia', 20]
+
 
     matches = []
 
@@ -132,13 +133,16 @@ def date_recognition(text):
         for match in z:
                 matches.append([match.start(), regexp8[1], 8])
 
+
     sorted_matched = sorted(matches, key =lambda l:l[0], reverse = False)
 
     iter = 0
     day_trigger = True
     month_trigger = True
+    year_trigger1 = True
+    year_trigger2 = True
     position = -1
-
+    temp = 0
 
     for it in range(len(sorted_matched)):
         if position == sorted_matched[it][0]:
@@ -167,23 +171,74 @@ def date_recognition(text):
             month_trigger = False
             position = sorted_matched[it][0]
             # print(month)
+        elif not day_trigger and not month_trigger:
+            year_list = sorted_matched[it:]
+
+            pos = 0
+
+            if year_list[0][2] == 2 or year_list[0][2] == 7 and year_trigger1:
+                temp = 1900
+                year_trigger1 = False
+                pos = 1
+            elif year_list[0][2] == 5 or (year_list[0][2] == 6 and year_list[1][2] == 7) and year_trigger1:
+                temp = 2000
+                year_trigger1 = False
+                if year_list[0][2] == 5:
+                    pos = 1
+                elif year_list[0][2] == 6 and year_list[1][2] == 7:
+                    pos = 2
+
+            if not year_trigger1 and year_trigger2:
+                if year_list[-2][2] == 5:
+                    temp += year_list[-2][1]
+                    temp += year_list[-1][1]
+                    year_trigger2 = False
+                else:
+                    temp += year_list[-2][1]*10
+                    temp += year_list[-1][1]
+                    year_trigger2 = False
+
+
+            if len(year_list) == 2 and year_trigger1 and year_trigger2:
+                # temp2 = 0
+                if year_list[0][2] == 5:
+                    temp = int('19'+str(year_list[0][1]+year_list[1][1]))
+                else:
+                    temp = int('19' + str(year_list[0][1]) + str(year_list[1][1]))
+            # print(year_list[pos:])
+            return {"day": day, "month": month, "year": temp}
+            # for i in range(len(year_list)):
+            #     if position == year_list[i][0]:
+            #         continue
+            #     if year_list[i][2] == 6 and year_list[i][1] == 2 and year_trigger:
+            #         temp = 2
+            #         year_trigger = False
+            #     if year_list[i][2] == 7 and temp == 2 and not year_trigger:
+            #         temp = 2000
+            #         year_trigger = False
+            #     if year_list[i][2] == 7 and temp == 0 and year_trigger:
+            #         year = 1000
+            #         year_trigger = False
+            #         year_trigger= False
+            #
+            #         print(year, year_list)
+            #     if len(year_list) == 2 and year_trigger:
+            #         year = 1900 + year_list[0][1] * 10 + year_list[1][1]
+            #         year_trigger = False
 
 
 
-
-
-
-    result = {
-        "day": day,
-        "month": month,
-        "year": year
-    }
-
-    # print(result)
-
-    if day == 0 or month == 0:
-        print("ERROR {}". format(result))
-    return result
+    # result = {
+    #     "day": day,
+    #     "month": month,
+    #     "year": year
+    # }
+    #
+    # # print(result)
+    #
+    # if day == 0 or month == 0:
+    #     print("ERROR {}". format(result))
+    # return result
 
 
 
@@ -192,6 +247,7 @@ with io.open('juniorDS_task.csv','r', encoding="utf-8") as file:
     text = []
     dates = []
     i = 0
+    error = 0
     for row in file:
         if i == 0:
             i+=1
@@ -203,11 +259,11 @@ with io.open('juniorDS_task.csv','r', encoding="utf-8") as file:
 
         date_from_text = date_recognition(text=sentence)
 
-
-        print("{} {} {}".format(date, sentence, date_from_text))
-        # if int(date[0]) != date_from_text['day'] or int(date[1]) != date_from_text['month']:
-        #     print("{} {}".format(date, date_from_text))
-
+        # print("{} {} {}".format(date, sentence, date_from_text))
+        if int(date[0]) != date_from_text['day'] or int(date[1]) != date_from_text['month'] or int(date[2]) != date_from_text['year']:
+            error += 1
+            print("{} {}".format(date, date_from_text))
+    print(error)
 
 
 
