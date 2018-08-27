@@ -82,8 +82,8 @@ def date_recognition(text):
 
     regexp9 = ['dziewięćset', 900]
 
+    # match sentence with regular expressions
     matches = []
-
     z = re.finditer(regexp0[0], sentence)
     if z:
         for match in z:
@@ -139,7 +139,7 @@ def date_recognition(text):
         for match in z:
                 matches.append([match.start(), regexp9[1], 9])
 
-
+    #sort matchings
     sorted_matched = sorted(matches, key =lambda l:l[0], reverse = False)
 
     iter = 0
@@ -147,44 +147,49 @@ def date_recognition(text):
     month_trigger = True
     year_trigger1 = True
     year_trigger2 = True
-    year_trigger3 = True
     position = -1
     temp = 0
 
     for it in range(len(sorted_matched)):
 
+        # skip if the same word was matched second time
         if position == sorted_matched[it][0]:
             continue
 
+        # if day not set and day format is N or 1X
         if sorted_matched[it][2] <= 2 and day_trigger:
             day = sorted_matched[it][1]
             iter = it + 1
             day_trigger = False
             position = sorted_matched[it][0]
 
+        # if day not set and day format is 2X + N
         elif sorted_matched[it][2] == 5 and day_trigger:
             day = sorted_matched[it][1] + sorted_matched[it+1][1]
             iter = it + 2
             day_trigger = False
             position = sorted_matched[it+1][0]
 
+        # if day set and month not set and month format: 'zero ' + N
         elif sorted_matched[it][2] == 0 and it >= iter and not day_trigger and month_trigger:
             month = sorted_matched[it+1][1]
             iter = it+1
             month_trigger = False
             position = sorted_matched[it+1][0]
 
+        # if day set and month not set and month format: N
         elif sorted_matched[it][2] in [1,2,4,6] and not day_trigger and month_trigger:
             month = sorted_matched[it][1]
             iter = it+1
             month_trigger = False
             position = sorted_matched[it][0]
 
+        # if day and month set
         elif not day_trigger and not month_trigger:
             year_list = sorted_matched[it:]
-
             pos = 0
 
+            # init 'year builder'
             if year_list[0][2] == 2 or year_list[0][2] == 7 and year_trigger1:
 
                 temp = 1900
@@ -202,9 +207,12 @@ def date_recognition(text):
                 elif year_list[0][2] == 6 and year_list[1][2] == 7:
                     pos = year_list[1][0]
 
+            # is year builder has something try to extract date
             if not year_trigger1 and year_trigger2 and len(year_list) != 2:
+                # skip matches for the same word
                 year_list = [x for x in year_list if x[0] > pos]
 
+                #skip rows that accord to 19XX or 20XX format
                 if year_list[0][2] == 9:
                     year_list = year_list[1:]
 
@@ -213,6 +221,7 @@ def date_recognition(text):
 
                 year_trigger2 = False
 
+                # set year in case of different date formats
                 if year_list[-2][2] == 5:
                     temp += year_list[-2][1]
                     temp += year_list[-1][1]
@@ -228,14 +237,19 @@ def date_recognition(text):
                     temp += year_list[0][1]
                     temp += year_list[-1][1]
 
+            # if date is still not finished try other formats
             if temp == 1900 or temp == 2000:
+
                 if len(year_list) == 2:
+
                     if year_list[0][2] == 2 and year_list[1][2] == 6:
                         temp += year_list[0][1]
+
                     if year_list[0][2] == 5 and year_list[1][2] == 1:
                         temp += year_list[0][1]
                         temp += year_list[1][1]
 
+            # if year is in format like '9X' -> 'nineties' etc
             if len(year_list) == 2 and year_trigger1 and year_trigger2:
 
                 if year_list[0][2] == 5:
@@ -244,35 +258,23 @@ def date_recognition(text):
                 else:
                     temp = int('19' + str(year_list[0][1]) + str(year_list[1][1]))
 
-
-
             return {"day": day, "month": month, "year": temp}
-
-
-    # result = {
-    #     "day": day,
-    #     "month": month,
-    #     "year": year
-    # }
-    #
-    # # print(result)
-    #
-    # if day == 0 or month == 0:
-    #     print("ERROR {}". format(result))
-    # return result
-
-
-
 
 with io.open('juniorDS_task.csv','r', encoding="utf-8") as file:
     text = []
     dates = []
     i = 0
     error = 0
+
+    # read file
     for row in file:
+
+        # skip header
         if i == 0:
             i+=1
             continue
+
+        # prepare data
         date = row.split(',')[:-1]
         sentence = " ".join([x.strip() for x in row.split(',')[-1].split(' ') if x.strip() not in stopwords])
         dates.append(date)
@@ -280,10 +282,11 @@ with io.open('juniorDS_task.csv','r', encoding="utf-8") as file:
 
         date_from_text = date_recognition(text=sentence)
 
-        # print("{} {} {}".format(date, sentence, date_from_text))
+        # print if extraction has gone wrong
         if int(date[0]) != date_from_text['day'] or int(date[1]) != date_from_text['month'] or int(date[2]) != date_from_text['year']:
             error += 1
             print("{} {}".format(date, date_from_text))
+
     print(error)
 
 
