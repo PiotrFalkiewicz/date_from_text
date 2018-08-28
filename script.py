@@ -5,6 +5,7 @@ stopwords = []
 # ['już', 'podaje', 'to', 'bedzie', 'będzie', 'yyyy', 'hmmm', '', 'tak', 'em', 'no', 'znaczy', 'zatem', 'text', 'dobrze']
 
 def date_recognition(text):
+    sentence = text
     day = 0
     month = 0
     year = 0
