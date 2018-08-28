@@ -5,7 +5,6 @@ stopwords = []
 # ['już', 'podaje', 'to', 'bedzie', 'będzie', 'yyyy', 'hmmm', '', 'tak', 'em', 'no', 'znaczy', 'zatem', 'text', 'dobrze']
 
 def date_recognition(text):
-    sentence = text
     day = 0
     month = 0
     year = 0
@@ -85,57 +84,57 @@ def date_recognition(text):
 
     # match sentence with regular expressions
     matches = []
-    z = re.finditer(regexp0[0], sentence)
+    z = re.finditer(regexp0[0], text)
     if z:
         for match in z:
             matches.append([match.start(), regexp0[1], 0])
 
     for i in range(len(regexp1)):
-        z = re.finditer(regexp1[i][0], sentence)
+        z = re.finditer(regexp1[i][0], text)
         if z:
             for match in z:
                 matches.append([match.start(), regexp1[i][1], 1])
 
     for i in range(len(regexp2)):
-        z = re.finditer(regexp2[i][0], sentence)
+        z = re.finditer(regexp2[i][0], text)
         if z:
             for match in z:
                 matches.append([match.start(), regexp2[i][1], 2])
 
-    z = re.finditer(regexp3[0], sentence)
+    z = re.finditer(regexp3[0], text)
     if z:
         for match in z:
             matches.append([match.start(), regexp3[1], 3])
 
     for i in range(len(regexp4)):
-        z = re.finditer(regexp4[i][0], sentence)
+        z = re.finditer(regexp4[i][0], text)
         if z:
             for match in z:
                 matches.append([match.start(), regexp4[i][1], 4])
 
     for i in range(len(regexp5)):
-        z = re.finditer(regexp5[i][0], sentence)
+        z = re.finditer(regexp5[i][0], text)
         if z:
             for match in z:
                 matches.append([match.start(), regexp5[i][1], 5])
 
     for i in range(len(regexp6)):
-        z = re.finditer(regexp6[i][0], sentence)
+        z = re.finditer(regexp6[i][0], text)
         if z:
             for match in z:
                 matches.append([match.start(), regexp6[i][1], 6])
 
-    z = re.finditer(regexp7[0], sentence)
+    z = re.finditer(regexp7[0], text)
     if z:
         for match in z:
                 matches.append([match.start(), regexp7[1], 7])
 
-    z = re.finditer(regexp8[0], sentence)
+    z = re.finditer(regexp8[0], text)
     if z:
         for match in z:
                 matches.append([match.start(), regexp8[1], 8])
 
-    z = re.finditer(regexp9[0], sentence)
+    z = re.finditer(regexp9[0], text)
     if z:
         for match in z:
                 matches.append([match.start(), regexp9[1], 9])
@@ -149,7 +148,6 @@ def date_recognition(text):
     year_trigger1 = True
     year_trigger2 = True
     position = -1
-    temp = 0
 
     for it in range(len(sorted_matched)):
 
@@ -160,28 +158,24 @@ def date_recognition(text):
         # if day not set and day format is N or 1X
         if sorted_matched[it][2] <= 2 and day_trigger:
             day = sorted_matched[it][1]
-            iter = it + 1
             day_trigger = False
             position = sorted_matched[it][0]
 
         # if day not set and day format is 2X + N
         elif sorted_matched[it][2] == 5 and day_trigger:
             day = sorted_matched[it][1] + sorted_matched[it+1][1]
-            iter = it + 2
             day_trigger = False
             position = sorted_matched[it+1][0]
 
         # if day set and month not set and month format: 'zero ' + N
         elif sorted_matched[it][2] == 0 and it >= iter and not day_trigger and month_trigger:
             month = sorted_matched[it+1][1]
-            iter = it+1
             month_trigger = False
             position = sorted_matched[it+1][0]
 
         # if day set and month not set and month format: N
         elif sorted_matched[it][2] in [1,2,4,6] and not day_trigger and month_trigger:
             month = sorted_matched[it][1]
-            iter = it+1
             month_trigger = False
             position = sorted_matched[it][0]
 
@@ -193,13 +187,13 @@ def date_recognition(text):
             # init 'year builder'
             if year_list[0][2] == 2 or year_list[0][2] == 7 and year_trigger1:
 
-                temp = 1900
+                year = 1900
                 year_trigger1 = False
                 pos = year_list[0][0]
 
             elif year_list[0][2] == 5 or (year_list[0][2] == 6 and year_list[1][2] == 7) and year_trigger1:
 
-                temp = 2000
+                year = 2000
                 year_trigger1 = False
 
                 if year_list[0][2] == 5:
@@ -224,42 +218,42 @@ def date_recognition(text):
 
                 # set year in case of different date formats
                 if year_list[-2][2] == 5:
-                    temp += year_list[-2][1]
-                    temp += year_list[-1][1]
+                    year += year_list[-2][1]
+                    year += year_list[-1][1]
 
                 elif year_list[0][2] == 2:
-                    temp += year_list[-2][1]
+                    year += year_list[-2][1]
 
                 elif year_list[0][2] == 6 and year_list[1][2] == 6:
-                    temp += year_list[0][1]*10
-                    temp += year_list[1][1]
+                    year += year_list[0][1]*10
+                    year += year_list[1][1]
 
                 elif year_list[0][2] == 5 and year_list[-1][2] == 1:
-                    temp += year_list[0][1]
-                    temp += year_list[-1][1]
+                    year += year_list[0][1]
+                    year += year_list[-1][1]
 
             # if date is still not finished try other formats
-            if temp == 1900 or temp == 2000:
+            if year == 1900 or year == 2000:
 
                 if len(year_list) == 2:
 
                     if year_list[0][2] == 2 and year_list[1][2] == 6:
-                        temp += year_list[0][1]
+                        year += year_list[0][1]
 
                     if year_list[0][2] == 5 and year_list[1][2] == 1:
-                        temp += year_list[0][1]
-                        temp += year_list[1][1]
+                        year += year_list[0][1]
+                        year += year_list[1][1]
 
             # if year is in format like '9X' -> 'nineties' etc
             if len(year_list) == 2 and year_trigger1 and year_trigger2:
 
                 if year_list[0][2] == 5:
-                    temp = int('19'+str(year_list[0][1]+year_list[1][1]))
+                    year = int('19'+str(year_list[0][1]+year_list[1][1]))
 
                 else:
-                    temp = int('19' + str(year_list[0][1]) + str(year_list[1][1]))
+                    year = int('19' + str(year_list[0][1]) + str(year_list[1][1]))
 
-            return {"day": day, "month": month, "year": temp}
+            return {"day": day, "month": month, "year": year}
 
 with io.open('juniorDS_task.csv','r', encoding="utf-8") as file:
     text = []
